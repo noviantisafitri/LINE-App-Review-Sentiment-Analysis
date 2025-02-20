@@ -1,4 +1,4 @@
-## **Analisis Sentimen Review Aplikasi LINE di Play Store**  
+## 📌 **Analisis Sentimen Review Aplikasi LINE di Play Store**  
 
 Repository ini berisi **proses Analisis Sentimen** terhadap **30.000 data review aplikasi LINE** di Play Store menggunakan teknik **Machine Learning dan Deep Learning**. Tujuan utama dari analisis ini adalah untuk **mengklasifikasikan review** ke dalam **3 kategori sentimen**: **positif, netral, dan negatif**.  
 
@@ -6,7 +6,7 @@ Proses analisis dilakukan dalam **3 skema pelatihan berbeda**, dengan kombinasi 
 
 ---
 
-## **Metodologi**
+## 🔍 **Metodologi**
 ### 📌 **1. Menyiapkan Data**
 Dataset yang digunakan terdiri dari **30.000 review aplikasi LINE**, dengan atribut:  
 - **review** → Teks ulasan pengguna.  
