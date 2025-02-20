@@ -1,71 +1,99 @@
-# **Analisis Sentimen Review Aplikasi LINE menggunakan Deep Learning**
+## **Analisis Sentimen Review Aplikasi LINE di Play Store**  
 
-Proyek ini bertujuan untuk melakukan analisis sentimen pada review aplikasi LINE menggunakan deep learning. Model yang dikembangkan bertujuan untuk mengklasifikasikan sentimen ke dalam tiga kategori: **negatif, netral, dan positif**.
+Repository ini berisi **proses Analisis Sentimen** terhadap **30.000 data review aplikasi LINE** di Play Store menggunakan teknik **Machine Learning dan Deep Learning**. Tujuan utama dari analisis ini adalah untuk **mengklasifikasikan review** ke dalam **3 kategori sentimen**: **positif, netral, dan negatif**.  
 
-## **1. Dataset**
-- Dataset terdiri dari **30.000 data** review aplikasi LINE.  
-- Setiap review dikategorikan ke dalam **tiga kelas**:  
-  - **Negatif** (0)  
-  - **Netral** (1)  
-  - **Positif** (2)  
+Proses analisis dilakukan dalam **3 skema pelatihan berbeda**, dengan kombinasi algoritma, metode ekstraksi fitur, dan pembagian data yang bervariasi.  
 
-- Dataset ini telah melalui proses **preprocessing** yang mencakup:
-  - **Case folding** (mengubah teks menjadi huruf kecil)
-  - **Tokenization** (memisahkan kata-kata dalam teks)
-  - **Stopword removal** (menghapus kata-kata umum yang tidak memiliki makna signifikan)
-  - **Stemming** (mengubah kata ke bentuk dasar)
-  - **Ekstraksi fitur** menggunakan **TF-IDF / Word2Vec**.
+---
 
-## **2. Model Deep Learning**
-Terdapat tiga skema pelatihan model yang telah diuji, dengan kombinasi metode ekstraksi fitur, algoritma, dan pembagian data:
+## **Metodologi**
+### 📌 **1. Menyiapkan Data**
+Dataset yang digunakan terdiri dari **30.000 review aplikasi LINE**, dengan atribut:  
+- **review** → Teks ulasan pengguna.  
+- **rating** → Skor yang diberikan pengguna (1-5).  
+- **date** → Tanggal dan waktu review dibuat.  
+- **username** → Nama pengguna yang memberikan review.  
 
-| Percobaan | Algoritma | Ekstraksi Fitur | Pembagian Data | Akurasi Training | Akurasi Testing |
-|-----------|-----------|----------------|----------------|------------------|----------------|
-| 1 | LSTM | TF-IDF | 80/20 | XX% | XX% |
-| 2 | BiLSTM | Word2Vec | 80/20 | XX% | XX% |
-| 3 | CNN + LSTM | TF-IDF | 70/30 | XX% | XX% |
+📌 **Preprocessing Data:**  
+- Menghapus nilai kosong.  
+- Konversi teks ke huruf kecil.  
+- Pembersihan teks (penghapusan karakter khusus, simbol, dan emoji).  
+- Labeling sentimen berdasarkan **rating dan kata kunci dalam review**.  
 
-> **Catatan**: Hasil akurasi pada training dan testing akan diupdate setelah model mendapatkan hasil terbaik.
+---
 
-## **3. Model Training**
-Model dilatih dengan kombinasi berbagai teknik optimasi:
-- **Optimizer**: Adam
-- **Loss Function**: Categorical Crossentropy
-- **Batch Size**: 32 / 64 (tergantung eksperimen)
-- **Epochs**: 10 - 50
-- **Embedding**: Word2Vec / Glove (jika diterapkan)
-- **Dropout**: Untuk menghindari overfitting
+### 📌 **2. Eksperimen dengan 3 Skema Pelatihan**  
 
-## **4. Cara Menjalankan Proyek**
-### **a. Clone Repository**
+#### 🟢 **Skema 1: CNN + Tokenisasi & Padding (80/20)**  
+- **Model**: **Convolutional Neural Network (CNN)**  
+- **Ekstraksi Fitur**: **Tokenisasi & Padding**  
+- **Pembagian Data**: **80% training, 20% testing**  
+- **Penjelasan**:  
+  - Data dikonversi ke **angka menggunakan tokenisasi**.  
+  - Panjang teks diseragamkan dengan **padding**.  
+  - CNN digunakan untuk menangkap pola dalam teks menggunakan **Conv1D, BatchNormalization, GlobalMaxPooling1D**.  
+
+#### 🟡 **Skema 2: SVM + TF-IDF (70/30)**  
+- **Model**: **Support Vector Machine (SVM) dengan kernel linear**  
+- **Ekstraksi Fitur**: **TF-IDF (Term Frequency - Inverse Document Frequency)**  
+- **Pembagian Data**: **70% training, 30% testing**  
+- **Penjelasan**:  
+  - Data dikonversi ke **vektor numerik menggunakan TF-IDF**.  
+  - Model **SVM digunakan untuk klasifikasi berbasis margin maksimal**, yang bekerja baik pada teks.  
+
+#### 🔵 **Skema 3: Random Forest + TF-IDF (80/20)**  
+- **Model**: **Random Forest Classifier**  
+- **Ekstraksi Fitur**: **TF-IDF**  
+- **Pembagian Data**: **80% training, 20% testing**  
+- **Penjelasan**:  
+  - Data dikonversi ke **vektor numerik menggunakan TF-IDF**.  
+  - Model **Random Forest dengan 100 pohon keputusan** digunakan untuk meningkatkan akurasi melalui **ensemble learning**.  
+
+---
+
+## 📊 **Evaluasi Model**
+📌 Setiap model dievaluasi berdasarkan **akurasi pada training set dan testing set** dengan **target akurasi ≥ 92%**.  
+📌 Jika model gagal mencapai target, dilakukan **penyesuaian parameter atau metode ekstraksi fitur**.  
+
+📌 **Hasil Akurasi Model:**  
+| Model  | Training Accuracy | Testing Accuracy |
+|--------|------------------|------------------|
+| **CNN (80/20)**  | 98.12% | 96.50% |
+| **SVM (70/30)**  | 99.88% | 99.39% |
+| **Random Forest (80/20)**  | 100% | 98.50% |
+
+📌 **Analisis Hasil**:  
+- Model **SVM** memberikan **hasil terbaik** dengan akurasi **99.39% pada testing set**.  
+- Model **CNN** cukup baik tetapi memerlukan waktu komputasi lebih lama.  
+- Model **Random Forest** memiliki **overfitting** pada training set tetapi tetap berkinerja baik.  
+
+---
+
+## 🚀 **Testing & Inference**
+Setelah pelatihan selesai, model diuji dengan **review baru** untuk memprediksi sentimen (**negatif, netral, atau positif**).  
+
+**🔹 Contoh Input Review:**  
+> "Aplikasi ini sangat membantu saya dalam berkomunikasi dengan teman-teman. Fitur-fiturnya keren!"  
+
+**🔹 Output Model:**  
+✅ **Prediksi Sentimen: Positif**  
+
+---
+
+## 🛠 **Instalasi & Cara Menjalankan**
+1️⃣ **Clone Repository Ini**  
 ```bash
-git clone https://github.com/username/repository-name.git
-cd repository-name
+git clone https://github.com/noviantisafitri/LINE-App-Review-Sentiment-Analysis.git
+cd LINE-App-Review-Sentiment-Analysis
 ```
-
-### **b. Install Dependencies**
-Pastikan Python sudah terinstall, lalu jalankan:
+2️⃣ **Install Library yang Diperlukan**  
 ```bash
 pip install -r requirements.txt
 ```
-
-### **c. Jalankan Training Model**
-Buka Jupyter Notebook atau jalankan script berikut untuk training:
+3️⃣ **Jalankan Notebook di Jupyter atau Colab**  
 ```bash
-python train.py
+jupyter notebook
 ```
+4️⃣ **Buka file `Sentimen Analysis.ipynb` dan jalankan semua sel kode**  
 
-### **d. Testing Model**
-Untuk melakukan prediksi pada review baru:
-```bash
-python inference.py --text "Aplikasi ini sangat bagus dan membantu!"
-```
-Output:
-```
-Predicted Sentiment: Positif
-```
-
-## **5. Hasil dan Evaluasi**
-- Model diuji dengan **akurasi minimum 85% pada testing set**.  
-- Target utama: **Mencapai akurasi di atas 92% pada training dan testing set**.  
-- Jika belum mencapai target, akan dilakukan **tuning hyperparameter dan eksperimen lebih lanjut**.
+---
